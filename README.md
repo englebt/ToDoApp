@@ -1,1 +1,1 @@
-SPA to-do list in ASP.Net.
+Simple SPA to-do list in ASP.Net.
