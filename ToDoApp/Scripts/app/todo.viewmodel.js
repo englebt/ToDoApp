@@ -1,30 +1,36 @@
-﻿function HomeViewModel(app, dataModel) {
+﻿function ToDoViewModel(app, dataModel) {
     var self = this;
 
-    self.myHometown = ko.observable("");
+    self.toDoLists = ko.observableArray();
+    self.error = ko.observable("");
 
+    self.addToDoList = function () {
+
+    };
+    
     Sammy(function () {
-        this.get('#home', function () {
+        this.get('#todo', function () {
             // Make a call to the protected Web API by passing in a Bearer Authorization Header
             $.get({
-                url: app.dataModel.userInfoUrl,
+                url: app.dataModel.toDoList,
                 contentType: "application/json; charset=utf-8",
                 headers: {
                     'Authorization': 'Bearer ' + app.dataModel.getAccessToken()
                 },
                 done: function (data) {
-                    self.myHometown('Your Hometown is : ' + data.hometown);
+                    self.toDoLists(data);
                 }
             });
         });
-        this.get('/', function () { this.app.runRoute('get', '#home') });
-    });
 
+        this.get('/', function () { this.app.runRoute('get', '#todo') });
+    });
+    
     return self;
 }
 
 app.addViewModel({
-    name: "Home",
-    bindingMemberName: "home",
-    factory: HomeViewModel
+    name: "ToDo",
+    bindingMemberName: "todo",
+    factory: ToDoViewModel
 });
