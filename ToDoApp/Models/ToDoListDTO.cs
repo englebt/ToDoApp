@@ -12,7 +12,7 @@ namespace ToDoApp.Models
         public int ToDoListId { get; set; }
 
         [Required]
-        public int UserId { get; set; }
+        public string UserName { get; set; }
         
         [Required]
         public string Title { get; set; }
@@ -26,7 +26,7 @@ namespace ToDoApp.Models
         public ToDoListDTO(ToDoList list)
         {
             ToDoListId = list.Id;
-            UserId = list.UserId;
+            UserName = list.UserName;
             Title = list.Title;
 
             foreach (ToDoItem item in list.ToDoItems)
@@ -40,7 +40,7 @@ namespace ToDoApp.Models
             ToDoList list = new ToDoList()
             {
                 Id = ToDoListId,
-                UserId = UserId,
+                UserName = UserName,
                 Title = Title,
                 ToDoItems = new List<ToDoItem>()
             };

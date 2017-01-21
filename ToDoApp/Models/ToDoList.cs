@@ -11,7 +11,7 @@ namespace ToDoApp.Models
         public int Id { get; set; }
 
         [Required]
-        public int UserId { get; set; }
+        public string UserName { get; set; }
 
         [Required]
         public string Title { get; set; }
