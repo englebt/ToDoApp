@@ -84,6 +84,7 @@
 
     self.initialize = function () {
         Sammy().run();
+        self.error
     }
 }
 

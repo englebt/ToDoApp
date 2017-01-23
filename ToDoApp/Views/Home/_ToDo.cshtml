@@ -1,32 +1,33 @@
-﻿<!-- ko with:app -->
-
-<h3>TODO Lists</h3>
+﻿<!-- ko with:todo -->
 
 @if (User.Identity.IsAuthenticated)
 {
+    <h3>TODO Lists</h3>
+
     @Html.Hidden("userId", User.Identity.Name)
+
+    <div class="row">
+        <div class="col-md-6">
+            <ul class="list-unstyled" data-bind="foreach: toDoItems, visible: toDoItems().length > 0">
+                <li>
+                    <div class="form-group form-inline">
+                        <input type="checkbox" class="checkbox" data-bind="checked: isComplete" />
+                        <input class="form-control" data-bind="value: title, disable: isComplete" />
+                        <button class="btn btn-danger btn-sm" data-bind="click: $parent.removeItem">Delete</button>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-1 col-md-offset-2">
+            <button class="btn btn-info" data-bind="click: addItem">New Task</button>
+        </div>
+        <div class="col-md-1">
+            <button class="btn btn-success" data-bind="click: save">Save</button>
+        </div>
+    </div>
 }
-
-<div class="alert alert-danger" data-bind="visible: error"><p data-bind="text: error"></p></div>
-
-<div class="row">
-    <div class="col-md-6">
-        <ul class="list-unstyled" data-bind="foreach: toDoItems, visible: toDoItems().length > 0">
-            <li>
-                <div class="form-group form-inline">
-                    <input type="checkbox" class="checkbox" data-bind="checked: isComplete" />
-                    <input class="form-control" data-bind="value: title, disable: isComplete" />
-                    <button class="btn btn-danger btn-sm" data-bind="click: $parent.removeItem">Delete</button>
-                </div>
-            </li>
-        </ul>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-md-2 col-md-offset-4">
-        <button class="btn btn-success" data-bind="click: addItem">New Task</button>
-    </div>
-</div>
 
 <!-- /ko -->

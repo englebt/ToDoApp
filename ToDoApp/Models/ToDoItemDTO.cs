@@ -18,6 +18,7 @@ namespace ToDoApp.Models
         [Required]
         public string Title { get; set; }
         public bool IsComplete { get; set; }
+        public bool _destroyed { get; set; }
         //public int ToDoListId { get; set; }
 
         #region Constructor
@@ -30,6 +31,7 @@ namespace ToDoApp.Models
             UserId = item.UserId;
             Title = item.Title;
             IsComplete = item.IsComplete;
+            _destroyed = item.Destroyed;
         }
 
         #endregion
@@ -41,7 +43,8 @@ namespace ToDoApp.Models
                 Id = ToDoItemId,
                 UserId = UserId, 
                 Title = Title,
-                IsComplete = IsComplete
+                IsComplete = IsComplete,
+                Destroyed = _destroyed
             };
         }
     }

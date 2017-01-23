@@ -34,3 +34,9 @@ textarea {
         padding: 10px 15px;
     }
 }
+
+input[disabled] {
+    text-decoration: line-through;
+    border-color: silver;
+    background-color: silver;
+}
