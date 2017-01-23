@@ -19,7 +19,7 @@ namespace ToDoApp.Models
 
         public bool IsComplete { get; set; }
 
-        public bool Destroyed { get; set; }
+        public bool Destroy { get; set; }
 
         //[ForeignKey("ToDoList")]
         //public int ToDoListId { get; set; }

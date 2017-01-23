@@ -74,9 +74,8 @@
             type: method,
             url: url,
             headers: { 'Authorization': 'Bearer ' + dataModel.getAccessToken() },
-            dataType: 'json',
-            contentType: 'application/json',
-            data: data ? JSON.stringify(data) : null
+            contentType: 'application/json; charset=utf-8',
+            data: data ? ko.toJSON(data) : null
         }).fail(function (jqXHR, textStatus, errorThrown) {
             self.error(errorThrown);
         });

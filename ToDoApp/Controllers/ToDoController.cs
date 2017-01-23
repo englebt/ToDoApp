@@ -27,62 +27,34 @@ namespace ToDoApp.Controllers
                 .Select(itemList => new ToDoItemDTO(itemList));
         }
 
-        // PUT: api/ToDo/5
-        [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutToDoItem(int id, ToDoItem toDoItem)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            if (id != toDoItem.Id)
-                return BadRequest();
-
-            db.Entry(toDoItem).State = EntityState.Modified;
-
-            try
-            {
-                await db.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ToDoItemExists(id))
-                    return NotFound();
-                else
-                    throw;
-            }
-
-            return StatusCode(HttpStatusCode.NoContent);
-        }
-
         // POST: api/ToDo
-        [ResponseType(typeof(ToDoItem))]
-        public async Task<IHttpActionResult> PostToDoItem(ToDoItem toDoItem)
+        [HttpPost]
+        public async Task<IHttpActionResult> PostToDoItems(IEnumerable<ToDoItemDTO> toDoItems)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            db.ToDoItems.Add(toDoItem);
-            db.SaveChanges();
+            foreach(ToDoItemDTO itemDTO in toDoItems)
+            {
+                ToDoItem item = db.ToDoItems.Find(itemDTO.ToDoItemId);
+
+                if (item != null)   // existing item
+                {
+                    if (itemDTO._destroy) // verify we haven't removed it from the VM
+                        db.ToDoItems.Remove(item);
+                    else // Update database with changes to existing item
+                    {
+                        item.Title = itemDTO.Title;
+                        item.IsComplete = itemDTO.IsComplete;
+                    }
+                }
+                else
+                    db.ToDoItems.Add(itemDTO.ToEntity());
+            }
+
             await db.SaveChangesAsync();
 
-            ToDoItemDTO itemDTO = new ToDoItemDTO(toDoItem);
-
-            return CreatedAtRoute("DefaultApi", new { id = toDoItem.Id }, itemDTO);
-        }
-
-
-        // DELETE: api/ToDo/5
-        [ResponseType(typeof(ToDoItem))]
-        public IHttpActionResult DeleteToDoItem(int id)
-        {
-            ToDoItem toDoItem = db.ToDoItems.Find(id);
-            if (toDoItem != null)
-            {
-                db.ToDoItems.Remove(toDoItem);
-                db.SaveChanges();
-            }
-
-            return Ok(toDoItem);
+            return Ok(toDoItems);
         }
 
         protected override void Dispose(bool disposing)

@@ -10,7 +10,7 @@ function ToDoViewModel(app) {
     var toDoUrl = '/api/ToDo';
     
     self.toDoItems = ko.observableArray([]);
-    self.newTaskText = ko.observable("New Task");
+    self.newTaskText = ko.observable();
 
     self.getAllTasks = function () {
         app.ajaxHelper(toDoUrl, 'GET').done(function (data) {
@@ -20,25 +20,15 @@ function ToDoViewModel(app) {
     }
 
     self.addItem = function () {
-        var task = {
-            userId: $('#userId').val(),
-            title: "New Task",
-            isComplete: false
-        };
-        app.ajaxHelper(toDoUrl, 'POST', task).done(function (data) {
-            self.toDoItems.push(new ToDoItem(data));
-        });
-    };
+        self.toDoItems.push(new ToDoItem({ title: self.newTaskText() }));
+        self.newTaskText("");
+    }
     
-    self.removeItem = function (item) {
-        app.ajaxHelper(toDoUrl + '/' + item.toDoItemId, 'DELETE');
-        self.toDoItems.destroy(item);
-    };
+    self.removeItem = function (item) { self.toDoItems.destroy(item); }
 
-    self.putItem = function (item) {
-        app.ajaxHelper(toDoUrl + '/' + item.toDoItemId, 'PUT').done(function (data) {
-            self.toDoItems[item](data);
-        });
+    self.save = function () {
+        var data = ko.toJSON({ toDoItems: self.toDoItems });
+        app.ajaxHelper(toDoUrl, 'POST', self.toDoItems);
     }
 
     Sammy(function () {

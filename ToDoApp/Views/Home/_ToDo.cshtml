@@ -7,7 +7,7 @@
     @Html.Hidden("userId", User.Identity.Name)
 
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-4">
             <ul class="list-unstyled" data-bind="foreach: toDoItems, visible: toDoItems().length > 0">
                 <li>
                     <div class="form-group form-inline">
@@ -21,8 +21,11 @@
     </div>
 
     <div class="row">
-        <div class="col-md-1 col-md-offset-3">
-            <button class="btn btn-info" data-bind="click: addItem">New Task</button>
+        <div class="col-md-1">
+            <button class="btn btn-info btn-sm" data-bind="click: addItem">New Task</button>
+        </div>
+        <div class="col-md-1">
+            <button class="btn btn-success btn-sm" data-bind="click: save">Save</button>
         </div>
     </div>
 }
