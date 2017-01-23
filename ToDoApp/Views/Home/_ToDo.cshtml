@@ -8,7 +8,7 @@
 
     <div class="row">
         <div class="col-md-4">
-            <ul class="list-unstyled" data-bind="foreach: toDoItems, visible: toDoItems().length > 0">
+            <ul class="list-unstyled" style="display:none;" data-bind="foreach: toDoItems, fadeVisible: toDoItems().length > 0">
                 <li>
                     <div class="form-group form-inline">
                         <input type="checkbox" class="checkbox" data-bind="checked: isComplete" />

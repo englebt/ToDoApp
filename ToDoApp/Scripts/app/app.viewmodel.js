@@ -25,6 +25,16 @@
     });
 
     // UI operations
+    ko.bindingHandlers.fadeVisible = {
+        init: function (element, valueAccessor) {
+            var shouldDisplay = valueAccessor();
+            $(element).toggle(shouldDisplay);
+        },
+        update: function (element, valueAccessor) {
+            var shouldDisplay = valueAccessor();
+            shouldDisplay ? $(element).fadeIn() : $(element).fadeOut();
+        }
+    };
 
     // Other navigateToX functions are added dynamically by app.addViewModel(...).
 
