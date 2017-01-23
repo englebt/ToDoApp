@@ -16,6 +16,7 @@ namespace ToDoApp.Models
         [Required]
         public string Title { get; set; }
 
-        public virtual List<ToDoItem> ToDoItems { get; set; }
+        public bool IsComplete { get; set; }
+        //public virtual List<ToDoItem> ToDoItems { get; set; }
     }
 }

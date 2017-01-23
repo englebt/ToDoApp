@@ -19,8 +19,7 @@ namespace ToDoApp.Controllers
         // GET: api/ToDoList
         public IEnumerable<ToDoListDTO> GetToDoLists()
         {
-            return db.ToDoLists.Include("ToDoItems")
-                .Where(u => u.UserName == User.Identity.Name)
+            return db.ToDoLists.Where(u => u.UserName == User.Identity.Name)
                 .OrderByDescending(u => u.Id)
                 .AsEnumerable()
                 .Select(todoList => new ToDoListDTO(todoList));

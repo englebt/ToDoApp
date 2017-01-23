@@ -17,16 +17,13 @@ namespace ToDoApp
                 "~/Scripts/jquery.unobtrusive*",
                 "~/Scripts/jquery.validate*"));
 
-            bundles.Add(new ScriptBundle("~/bundles/knockout").Include(
-                "~/Scripts/knockout-{version}.js",
-                "~/Scripts/knockout.validation.js"));
-
             bundles.Add(new ScriptBundle("~/bundles/app").Include(
+                "~/Scripts/knockout-{version}.js",
+                "~/Scripts/knockout.validation.js",
                 "~/Scripts/sammy-{version}.js",
                 "~/Scripts/app/common.js",
-                "~/Scripts/app/app.datamodel.js",
+                "~/scripts/app/app.datamodel.js",
                 "~/Scripts/app/app.viewmodel.js",
-                "~/Scripts/app/home.viewmodel.js",
                 "~/Scripts/app/todo.viewmodel.js",
                 "~/Scripts/app/_run.js"));
 

@@ -1,8 +1,15 @@
-﻿@section SPAViews {
-    @Html.Partial("_Home")
-    @Html.Partial("_ToDo")
+﻿
+@section SPAViews {
+    @if (User.Identity.IsAuthenticated)
+    {
+        @Html.Partial("_ToDo")
+    }
+    else
+    {
+        @Html.Partial("_Home")
+    }
 }
+
 @section Scripts{
-    @Scripts.Render("~/bundles/knockout")
     @Scripts.Render("~/bundles/app")
 }
