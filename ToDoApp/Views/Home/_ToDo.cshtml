@@ -1,11 +1,32 @@
-﻿<!-- ko with: todo -->
+﻿<!-- ko with:app -->
 
 <h3>TODO Lists</h3>
 
-<ul data-bind="foreach: toDoLists">
-    <li data-bind="text: Title"></li>
-</ul>
+@if (User.Identity.IsAuthenticated)
+{
+    @Html.Hidden("userId", User.Identity.Name)
+}
 
-<button data-bind="click: addToDoList">New List</button>
+<div class="alert alert-danger" data-bind="visible: error"><p data-bind="text: error"></p></div>
+
+<div class="row">
+    <div class="col-md-6">
+        <ul class="list-unstyled" data-bind="foreach: toDoItems, visible: toDoItems().length > 0">
+            <li>
+                <div class="form-group form-inline">
+                    <input type="checkbox" class="checkbox" data-bind="checked: isComplete" />
+                    <input class="form-control" data-bind="value: title, disable: isComplete" />
+                    <button class="btn btn-danger btn-sm" data-bind="click: $parent.removeItem">Delete</button>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-2 col-md-offset-4">
+        <button class="btn btn-success" data-bind="click: addItem">New Task</button>
+    </div>
+</div>
 
 <!-- /ko -->

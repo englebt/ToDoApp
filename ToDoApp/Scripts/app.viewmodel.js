@@ -1,6 +1,7 @@
-﻿function AppViewModel(dataModel) {
+﻿var AppViewModel = function (dataModel) {
     // Private state
     var self = this;
+    var toDoUrl = '/api/ToDo';
 
     // Private operations
     function cleanUpLocation() {
@@ -11,6 +12,20 @@
         }
     }
 
+    function ajaxHelper(url, method, data) {
+        self.error(''); // Clear error message
+        return $.ajax({
+            type: method,
+            url: url,
+            headers: { 'Authorization': 'Bearer ' + dataModel.getAccessToken() },
+            dataType: 'json',
+            contentType: 'application/json',
+            data: data ? JSON.stringify(data) : null
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            self.error(errorThrown);
+        });
+    }
+
     // Data
     self.Views = {
         Loading: {} // Other views are added dynamically by app.addViewModel(...).
@@ -19,14 +34,43 @@
 
     // UI state
     self.view = ko.observable(self.Views.Loading);
+    self.toDoItems = ko.observableArray();
+    self.toDoItem = ko.observable();
     self.error = ko.observable();
+    self.newToDo = {
+        title: ko.observable(),
+        isComplete: ko.observable()
+    };
     self.loading = ko.computed(function () {
         return self.view() === self.Views.Loading;
     });
 
     // UI operations
+    self.getAllTasks = function () {
+        ajaxHelper(toDoUrl, 'GET').done(function (data) {
+            self.toDoItems(data);
+        });
+    }
 
-    // Other navigateToX functions are added dynamically by app.addViewModel(...).
+    self.getItem = function (item) {
+        ajaxHelper(toDoUrl + item.ToDoItemId, 'GET').done(function (data) {
+            self.toDoItem(data);
+        });
+    }
+
+    self.addItem = function (item) {
+        var task = {
+            userId: $('#userId').val(),
+            title: "New Task",
+            isComplete: false
+        };
+
+        ajaxHelper(toDoUrl, 'POST', task).done(function (item) {
+            self.toDoItems.push(item);
+        });
+    };
+
+    self.removeItem = function (item) { self.toDoItems.destroy(item) };
 
     // Other operations
     self.addViewModel = function (options) {
@@ -46,11 +90,12 @@
                 if (fragment.access_token) {
                     // returning with access token, restore old hash, or at least hide token
                     window.location.hash = fragment.state || '';
-                    dataModel.setAccessToken(fragment.access_token);
-                } else {
-                    // no token - so bounce to Authorize endpoint in AccountController to sign in or register
-                    window.location = "/Account/Authorize?client_id=web&response_type=token&state=" + encodeURIComponent(window.location.hash);
+                    setAccessToken(fragment.access_token);
                 }
+                //} else {
+                //    // no token - so bounce to Authorize endpoint in AccountController to sign in or register
+                //    window.location = "/Account/Authorize?client_id=web&response_type=token&state=" + encodeURIComponent(window.location.hash);
+                //}
             }
 
             return self.Views[options.name];
@@ -68,23 +113,21 @@
         self["navigateTo" + options.name] = navigator;
     };
 
-    self.ajaxHelper = function ajaxHelper(url, method, data) {
-        self.error(''); // Clear error message
-        return $.ajax({
-            type: method,
-            url: url,
-            headers: { 'Authorization': 'Bearer ' + dataModel.getAccessToken() },
-            dataType: 'json',
-            contentType: 'application/json',
-            data: data ? JSON.stringify(data) : null
-        }).fail(function (jqXHR, textStatus, errorThrown) {
-            self.error(errorThrown);
-        });
-    };
-
     self.initialize = function () {
         Sammy().run();
+        self.getAllTasks();
     }
-}
+};
 
 var app = new AppViewModel(new AppDataModel());
+app.initialize();
+
+app.addViewModel({
+    name: "TODO",
+    bindingMemberName: "todo",
+    factory: AppViewModel
+});
+
+// Activate Knockout
+ko.validation.init({ grouping: { observable: false } });
+ko.applyBindings(app);

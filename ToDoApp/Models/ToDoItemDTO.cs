@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Web.Http;
 
 namespace ToDoApp.Models
 {
@@ -10,11 +11,14 @@ namespace ToDoApp.Models
     {
         [Key]
         public int ToDoItemId { get; set; }
+
+        [Required]
+        public string UserId { get; set; }
         
         [Required]
         public string Title { get; set; }
         public bool IsComplete { get; set; }
-        public int ToDoListId { get; set; }
+        //public int ToDoListId { get; set; }
 
         #region Constructor
 
@@ -23,9 +27,9 @@ namespace ToDoApp.Models
         public ToDoItemDTO(ToDoItem item)
         {
             ToDoItemId = item.Id;
+            UserId = item.UserId;
             Title = item.Title;
             IsComplete = item.IsComplete;
-            ToDoListId = item.ToDoListId;
         }
 
         #endregion
@@ -35,9 +39,9 @@ namespace ToDoApp.Models
             return new ToDoItem()
             {
                 Id = ToDoItemId,
+                UserId = UserId, 
                 Title = Title,
-                IsComplete = IsComplete,
-                ToDoListId = ToDoListId
+                IsComplete = IsComplete
             };
         }
     }

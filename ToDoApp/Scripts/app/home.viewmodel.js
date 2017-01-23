@@ -1,22 +1,10 @@
 ﻿function HomeViewModel(app, dataModel) {
     var self = this;
 
-    self.myHometown = ko.observable("");
+    //self.myHometown = ko.observable("");
 
     Sammy(function () {
-        this.get('#home', function () {
-            // Make a call to the protected Web API by passing in a Bearer Authorization Header
-            $.get({
-                url: app.dataModel.userInfoUrl,
-                contentType: "application/json; charset=utf-8",
-                headers: {
-                    'Authorization': 'Bearer ' + app.dataModel.getAccessToken()
-                },
-                done: function (data) {
-                    self.myHometown('Your Hometown is : ' + data.hometown);
-                }
-            });
-        });
+        this.get('#home', function () { this.app.runRoute('get', '#home') });
         this.get('/', function () { this.app.runRoute('get', '#home') });
     });
 

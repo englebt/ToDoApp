@@ -41,5 +41,7 @@ window.common = (function () {
         return data;
     }
 
+    
+
     return common;
 })();

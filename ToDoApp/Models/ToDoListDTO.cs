@@ -17,7 +17,8 @@ namespace ToDoApp.Models
         [Required]
         public string Title { get; set; }
 
-        public virtual List<ToDoItemDTO> ToDoItems { get; set; }
+        public bool IsComplete { get; set; }
+        //public virtual List<ToDoItemDTO> ToDoItems { get; set; }
 
         #region Constructor
 
@@ -28,9 +29,9 @@ namespace ToDoApp.Models
             ToDoListId = list.Id;
             UserName = list.UserName;
             Title = list.Title;
-
-            foreach (ToDoItem item in list.ToDoItems)
-                ToDoItems.Add(new ToDoItemDTO(item));
+            IsComplete = list.IsComplete;
+            //foreach (ToDoItem item in list.ToDoItems)
+            //    ToDoItems.Add(new ToDoItemDTO(item));
         }
 
         #endregion
@@ -42,11 +43,12 @@ namespace ToDoApp.Models
                 Id = ToDoListId,
                 UserName = UserName,
                 Title = Title,
-                ToDoItems = new List<ToDoItem>()
+                IsComplete = IsComplete
+                //ToDoItems = new List<ToDoItem>()
             };
 
-            foreach (ToDoItemDTO item in ToDoItems)
-                list.ToDoItems.Add(item.ToEntity());
+            //foreach (ToDoItemDTO item in ToDoItems)
+            //    list.ToDoItems.Add(item.ToEntity());
 
             return list;
         }
