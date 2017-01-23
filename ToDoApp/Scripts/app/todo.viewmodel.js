@@ -1,12 +1,21 @@
-﻿function ToDoViewModel(app) {
+﻿function ToDoItem(data) {
+    this.userId = $('#userId').val();
+    this.toDoItemId = data.toDoItemId;
+    this.title = ko.observable(data.title);
+    this.isComplete = ko.observable(data.isComplete);
+}
+
+function ToDoViewModel(app) {
     var self = this;
     var toDoUrl = '/api/ToDo';
     
-    self.toDoItems = ko.observableArray();
+    self.toDoItems = ko.observableArray([]);
+    self.newTaskText = ko.observable("New Task");
 
     self.getAllTasks = function () {
         app.ajaxHelper(toDoUrl, 'GET').done(function (data) {
-            self.toDoItems(data);
+            var mapped = $.map(data, function (task) { return new ToDoItem(task); });
+            self.toDoItems(mapped);
         });
     }
 
@@ -16,17 +25,21 @@
             title: "New Task",
             isComplete: false
         };
-
-        self.toDoItems.push(task);
-    };
-    
-    self.removeItem = function (item) { self.toDoItems.destroy(item); };
-
-    self.save = function () {
-        app.ajaxHelper(toDoUrl, 'POST', self.toDoItems).done(function (data) {
-            self.toDoItems(data);
+        app.ajaxHelper(toDoUrl, 'POST', task).done(function (data) {
+            self.toDoItems.push(new ToDoItem(data));
         });
     };
+    
+    self.removeItem = function (item) {
+        app.ajaxHelper(toDoUrl + '/' + item.toDoItemId, 'DELETE');
+        self.toDoItems.destroy(item);
+    };
+
+    self.putItem = function (item) {
+        app.ajaxHelper(toDoUrl + '/' + item.toDoItemId, 'PUT').done(function (data) {
+            self.toDoItems[item](data);
+        });
+    }
 
     Sammy(function () {
         this.get('#todo', function () { self.getAllTasks(); });
