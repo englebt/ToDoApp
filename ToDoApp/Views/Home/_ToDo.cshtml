@@ -6,9 +6,12 @@
 
     @Html.Hidden("userId", User.Identity.Name)
 
-    <div class="row">
+    <div class="row" style="display:none;" data-bind="foreach: toDoLists, fadeVisible: toDoLists().length > 0">
         <div class="col-md-4">
-            <ul class="list-unstyled" style="display:none;" data-bind="foreach: toDoItems, fadeVisible: toDoItems().length > 0">
+            <label class="control-label">List:</label>
+            <input class="form-control" data-bind="value: title"/>
+            <hr/>
+            <ul class="list-unstyled" data-bind="foreach: toDoItems">
                 <li>
                     <div class="form-group form-inline">
                         <input type="checkbox" class="checkbox" data-bind="checked: isComplete" />
@@ -17,12 +20,13 @@
                     </div>
                 </li>
             </ul>
+            <button class="btn btn-info btn-sm" data-bind="click: addItem">New Item</button>
         </div>
     </div>
-
+    <hr />
     <div class="row">
         <div class="col-md-1">
-            <button class="btn btn-info btn-sm" data-bind="click: addItem">New Task</button>
+            <button class="btn btn-info btn-sm" data-bind="click: addList">New List</button>
         </div>
         <div class="col-md-1">
             <button class="btn btn-success btn-sm" data-bind="click: save">Save</button>

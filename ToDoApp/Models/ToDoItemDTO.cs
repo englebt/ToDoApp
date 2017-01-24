@@ -9,7 +9,6 @@ namespace ToDoApp.Models
 {
     public class ToDoItemDTO
     {
-        [Key]
         public int ToDoItemId { get; set; }
 
         [Required]
@@ -19,7 +18,6 @@ namespace ToDoApp.Models
         public string Title { get; set; }
         public bool IsComplete { get; set; }
         public bool _destroy { get; set; }
-        //public int ToDoListId { get; set; }
 
         #region Constructor
 
@@ -44,7 +42,7 @@ namespace ToDoApp.Models
                 UserId = UserId, 
                 Title = Title,
                 IsComplete = IsComplete,
-                Destroy = _destroy
+                Destroy = _destroy,
             };
         }
     }
