@@ -33,6 +33,8 @@ namespace ToDoApp.Models
             UserId = list.UserId;
             Title = list.Title;
             _destroy = list.Destroy;
+
+            ToDoItems = new List<ToDoItemDTO>();
             foreach (ToDoItem item in list.ToDoItems)
                 ToDoItems.Add(new ToDoItemDTO(item));
         }

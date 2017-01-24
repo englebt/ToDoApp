@@ -23,7 +23,7 @@ namespace ToDoApp.Controllers
         {
             return db.ToDoLists.Include(l => l.ToDoItems)
                 .Where(l => l.UserId == User.Identity.Name)
-                .OrderByDescending(l => l.Id)
+                .OrderBy(l => l.Id)
                 .AsEnumerable()
                 .Select(list => new Models.ToDoListDTO(list));
         }
@@ -35,51 +35,10 @@ namespace ToDoApp.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            UpdateLists(toDoLists);
-
-            await db.SaveChangesAsync();
+            await UpdateLists(toDoLists);
 
             return Ok(toDoLists);
         }
-
-        //// GET: api/ToDo
-        //public IEnumerable<ToDoItemDTO> GetToDoItems()
-        //{
-        //    return db.ToDoItems.Where(i => i.UserId == User.Identity.Name)
-        //        .OrderByDescending(i => i.Id)
-        //        .AsEnumerable()
-        //        .Select(itemList => new ToDoItemDTO(itemList));
-        //}
-
-        //// POST: api/ToDo
-        //[HttpPost]
-        //public async Task<IHttpActionResult> PostToDoItems(IEnumerable<ToDoItemDTO> toDoItems)
-        //{
-        //    if (!ModelState.IsValid)
-        //        return BadRequest(ModelState);
-
-        //    foreach(ToDoItemDTO itemDTO in toDoItems)
-        //    {
-        //        ToDoItem item = db.ToDoItems.Find(itemDTO.ToDoItemId);
-
-        //        if (item != null)   // existing item
-        //        {
-        //            if (itemDTO._destroy) // verify we haven't removed it from the VM
-        //                db.ToDoItems.Remove(item);
-        //            else // Update database with changes to existing item
-        //            {
-        //                item.Title = itemDTO.Title;
-        //                item.IsComplete = itemDTO.IsComplete;
-        //            }
-        //        }
-        //        else
-        //            db.ToDoItems.Add(itemDTO.ToEntity());
-        //    }
-
-        //    await db.SaveChangesAsync();
-
-        //    return Ok(toDoItems);
-        //}
 
         protected override void Dispose(bool disposing)
         {
@@ -94,7 +53,7 @@ namespace ToDoApp.Controllers
             return db.ToDoItems.Count(e => e.Id == id) > 0;
         }
 
-        private void UpdateLists(IEnumerable<ToDoListDTO> toDoLists)
+        private async Task UpdateLists(IEnumerable<ToDoListDTO> toDoLists)
         {
             foreach (ToDoListDTO listDTO in toDoLists)
             {
@@ -127,13 +86,19 @@ namespace ToDoApp.Controllers
                                 }
                             }
                             else
-                                db.ToDoItems.Add(itemDTO.ToEntity());
+                            {
+                                item = itemDTO.ToEntity();
+                                list.ToDoItems.Add(item);
+                                db.ToDoItems.Add(item);
+                            }
                         }
                     }
                 }
                 else
                     db.ToDoLists.Add(listDTO.ToEntity());
             }
+
+            await db.SaveChangesAsync();
         }
     }
 }

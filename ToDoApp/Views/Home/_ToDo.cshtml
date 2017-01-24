@@ -1,4 +1,10 @@
-﻿<!-- ko with:todo -->
+﻿<div class="row">
+    <div class="col-md-12">
+        <div class="alert alert-danger fade" style="display:none;" data-bind="visible: error"><p data-bind="text: error"></p></div>
+    </div>
+</div>
+
+<!-- ko with:todo -->
 
 @if (User.Identity.IsAuthenticated)
 {
@@ -7,13 +13,15 @@
     @Html.Hidden("userId", User.Identity.Name)
 
     <div class="row" style="display:none;" data-bind="foreach: toDoLists, fadeVisible: toDoLists().length > 0">
-        <div class="col-md-4">
-            <label class="control-label">List:</label>
-            <input class="form-control" data-bind="value: title"/>
+        <div class="col-md-4 to-do-list">
+            <div class="form-inline">
+                <label class="control-label">List:</label>
+                <input class="form-control" data-bind="value: title" />
+            </div>
             <hr/>
             <ul class="list-unstyled" data-bind="foreach: toDoItems">
                 <li>
-                    <div class="form-group form-inline">
+                    <div class="form-group form-inline to-do-item">
                         <input type="checkbox" class="checkbox" data-bind="checked: isComplete" />
                         <input class="form-control" data-bind="value: title, disable: isComplete" />
                         <button class="btn btn-danger btn-sm" data-bind="click: $parent.removeItem">Delete</button>

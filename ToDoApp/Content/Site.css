@@ -35,6 +35,10 @@ textarea {
     }
 }
 
+.to-do-list{}
+
+.to-do-item{}
+
 input[disabled] {
     text-decoration: line-through;
     border-color: silver;
