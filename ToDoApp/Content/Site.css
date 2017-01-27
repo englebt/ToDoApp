@@ -20,7 +20,7 @@
 input,
 select,
 textarea {
-    max-width: 280px;
+    max-width: 250px;
 }
 
 /* Set padding to display errors that occur during databinding */
@@ -39,4 +39,20 @@ input[disabled] {
     text-decoration: line-through;
     border-color: silver;
     background-color: silver;
+}
+
+.to-do-list {
+    padding: 8px;
+    border: 1px solid black;
+    margin: 4px;
+    width: 30%;
+    box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.22);
+    background-color: #ffc
+}
+
+.to-do-list input[type=text]{
+}
+
+.to-do-item {
+
 }
