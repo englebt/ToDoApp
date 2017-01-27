@@ -54,9 +54,9 @@ input[disabled] {
     background-color: #ffc
 }
 
-.to-do-list input[type=text]{
-}
+.to-do-item {}
 
-.to-do-item {
-
+.to-do-item input[type=checkbox] {
+    height: 20px;
+    width: 20px;
 }
