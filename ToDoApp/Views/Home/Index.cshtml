@@ -1,20 +1,11 @@
-﻿<div class="row">
-    <div class="col-md-12">
-        <div class="alert alert-danger" style="display:none;" data-bind="visible: error"><p data-bind="text: error"></p></div>
-    </div>
-</div>
-
-@section SPAViews {
+﻿@section SPAViews {
     @if (User.Identity.IsAuthenticated)
-    {
-        @Html.Partial("_ToDo")
-    }
+    { @Html.Partial("_ToDo") }
     else
-    {
-        @Html.Partial("_Home")
-    }
+    { @Html.Partial("_Home") }
 }
 
 @section Scripts{
+    @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/app")
 }

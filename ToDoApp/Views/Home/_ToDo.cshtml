@@ -1,4 +1,10 @@
-﻿<!-- ko with:todo -->
+﻿<div class="row">
+    <div class="col-md-12">
+        <div class="alert alert-danger fade" style="display:none;" data-bind="visible: error"><p data-bind="text: error"></p></div>
+    </div>
+</div>
+
+<!-- ko with:todo -->
 
 @if (User.Identity.IsAuthenticated)
 {
@@ -16,6 +22,8 @@
             <ul class="list-unstyled" data-bind="foreach: toDoItems">
                 <li class="to-do-item">
                     <div class="form-group form-inline">
+                <li>
+                    <div class="form-group form-inline to-do-item">
                         <input type="checkbox" class="checkbox" data-bind="checked: isComplete" />
                         <input class="form-control" type="text" data-bind="value: title, disable: isComplete" />
                         <button class="btn btn-danger btn-sm" data-bind="click: $parent.removeItem">X</button>
