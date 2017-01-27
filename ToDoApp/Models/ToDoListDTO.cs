@@ -8,30 +8,35 @@ namespace ToDoApp.Models
 {
     public class ToDoListDTO
     {
-        [Key]
         public int ToDoListId { get; set; }
 
         [Required]
-        public string UserName { get; set; }
-        
+        public string UserId { get; set; }
+
         [Required]
         public string Title { get; set; }
 
-        public bool IsComplete { get; set; }
-        //public virtual List<ToDoItemDTO> ToDoItems { get; set; }
+        public bool _destroy { get; set; }
+
+        public List<ToDoItemDTO> ToDoItems { get; set; }
 
         #region Constructor
 
-        public ToDoListDTO() { }
+        public ToDoListDTO()
+        {
+            ToDoItems = new List<ToDoItemDTO>();
+        }
 
         public ToDoListDTO(ToDoList list)
         {
             ToDoListId = list.Id;
-            UserName = list.UserName;
+            UserId = list.UserId;
             Title = list.Title;
-            IsComplete = list.IsComplete;
-            //foreach (ToDoItem item in list.ToDoItems)
-            //    ToDoItems.Add(new ToDoItemDTO(item));
+            _destroy = list.Destroy;
+
+            ToDoItems = new List<ToDoItemDTO>();
+            foreach (ToDoItem item in list.ToDoItems)
+                ToDoItems.Add(new ToDoItemDTO(item));
         }
 
         #endregion
@@ -41,14 +46,12 @@ namespace ToDoApp.Models
             ToDoList list = new ToDoList()
             {
                 Id = ToDoListId,
-                UserName = UserName,
+                UserId = UserId,
                 Title = Title,
-                IsComplete = IsComplete
-                //ToDoItems = new List<ToDoItem>()
+                Destroy = _destroy
             };
-
-            //foreach (ToDoItemDTO item in ToDoItems)
-            //    list.ToDoItems.Add(item.ToEntity());
+            foreach (ToDoItemDTO itemDTO in ToDoItems)
+                list.ToDoItems.Add(itemDTO.ToEntity());
 
             return list;
         }

@@ -25,6 +25,16 @@
     });
 
     // UI operations
+    ko.bindingHandlers.fadeVisible = {
+        init: function (element, valueAccessor) {
+            var shouldDisplay = valueAccessor();
+            $(element).toggle(shouldDisplay);
+        },
+        update: function (element, valueAccessor) {
+            var shouldDisplay = valueAccessor();
+            shouldDisplay ? $(element).fadeIn() : $(element).fadeOut();
+        }
+    };
 
     // Other navigateToX functions are added dynamically by app.addViewModel(...).
 
@@ -74,9 +84,8 @@
             type: method,
             url: url,
             headers: { 'Authorization': 'Bearer ' + dataModel.getAccessToken() },
-            dataType: 'json',
-            contentType: 'application/json',
-            data: data ? JSON.stringify(data) : null
+            contentType: 'application/json; charset=utf-8',
+            data: data ? ko.toJSON(data) : null
         }).fail(function (jqXHR, textStatus, errorThrown) {
             self.error(errorThrown);
         });
@@ -84,7 +93,6 @@
 
     self.initialize = function () {
         Sammy().run();
-        self.error
     }
 }
 

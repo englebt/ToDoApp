@@ -1,40 +1,69 @@
-﻿function ToDoViewModel(app) {
+﻿function ToDoList(data) {
+    var self = this;
+    self.newItemText = ko.observable("New Item");
+    self.addItem = function () {
+        var item = new ToDoItem({
+            title: self.newItemText(),
+            isComplete: false
+        });
+        self.toDoItems.push(item);
+        self.newItemText("");
+    }
+    self.removeItem = function (item) { self.toDoItems.destroy(item); }
+
+    self.UserId = $('#userId').val();
+    self.toDoListId = data.toDoListId;
+    self.title = ko.observable(data.title);
+    self.toDoItems = ko.observableArray(data.toDoItems);
+}
+
+function ToDoItem(data) {
+    this.userId = $('#userId').val();
+    this.toDoItemId = data.toDoItemId;
+    this.title = ko.observable(data.title);
+    this.isComplete = ko.observable(data.isComplete);
+}
+
+function ToDoViewModel(app) {
     var self = this;
     var toDoUrl = '/api/ToDo';
     
-    self.toDoItems = ko.observableArray();
-
-    self.getAllTasks = function () {
+    self.toDoLists = ko.observableArray([]);
+    self.newListText = ko.observable("New List");
+    
+    self.getAllLists = function () {
         app.ajaxHelper(toDoUrl, 'GET').done(function (data) {
-            self.toDoItems(data);
+            var mapped = $.map(data, function (list) { return new ToDoList(list); });
+            self.toDoLists(mapped);
         });
     }
 
-    self.addItem = function () {
-        var task = {
-            userId: $('#userId').val(),
-            title: "New Task",
-            isComplete: false
-        };
+    self.getAllTasks = function () {
+        app.ajaxHelper(toDoUrl, 'GET').done(function (data) {
+            var mapped = $.map(data, function (task) { return new ToDoItem(task); });
+            self.toDoItems(mapped);
+        });
+    }
 
-        self.toDoItems.push(task);
-    };
-    
-    self.removeItem = function (item) { self.toDoItems.destroy(item); };
+    self.addList = function () {
+        self.toDoLists.push(new ToDoList({ title: self.newListText() }));
+        self.newListText("");
+    }
+
+    self.removeTask = function (list) { self.toDoLists.destroy(list); }
 
     self.save = function () {
-        app.ajaxHelper(toDoUrl, 'POST', self.toDoItems).done(function (data) {
-            self.toDoItems(data);
-        });
-    };
+        var data = ko.toJSON({ toDoLists: self.toDoLists });
+        app.ajaxHelper(toDoUrl, 'POST', self.toDoLists);
+    }
 
     Sammy(function () {
-        this.get('#todo', function () { self.getAllTasks(); });
+        this.get('#todo', function () { self.getAllLists(); });
         this.get('/', function () { this.app.runRoute('get', '#todo') });
     });
     
     self.initialize = function () {
-        self.getAllTasks();
+        self.getAllLists();
     }
 
     return self;

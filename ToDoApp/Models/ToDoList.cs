@@ -1,22 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 
 namespace ToDoApp.Models
 {
     public class ToDoList
     {
+        [Key]
         public int Id { get; set; }
 
         [Required]
-        public string UserName { get; set; }
+        public string UserId { get; set; }
 
         [Required]
         public string Title { get; set; }
 
-        public bool IsComplete { get; set; }
-        //public virtual List<ToDoItem> ToDoItems { get; set; }
+        public bool Destroy { get; set; }
+        
+        public virtual List<ToDoItem> ToDoItems { get; set; }
+
+        #region Constructor 
+
+        public ToDoList()
+        {
+            ToDoItems = new List<ToDoItem>();
+        }
+
+        #endregion
     }
 }

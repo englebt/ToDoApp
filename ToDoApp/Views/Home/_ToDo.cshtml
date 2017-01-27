@@ -1,4 +1,10 @@
-﻿<!-- ko with:todo -->
+﻿<div class="row">
+    <div class="col-md-12">
+        <div class="alert alert-danger fade" style="display:none;" data-bind="visible: error"><p data-bind="text: error"></p></div>
+    </div>
+</div>
+
+<!-- ko with:todo -->
 
 @if (User.Identity.IsAuthenticated)
 {
@@ -6,26 +12,34 @@
 
     @Html.Hidden("userId", User.Identity.Name)
 
-    <div class="row">
-        <div class="col-md-6">
-            <ul class="list-unstyled" data-bind="foreach: toDoItems, visible: toDoItems().length > 0">
-                <li>
+    <div class="row" style="display:none;" data-bind="foreach: toDoLists, fadeVisible: toDoLists().length > 0">
+        <div class="col-md-4 to-do-list">
+            <div class="form-inline">
+                <label class="control-label">List Title:</label>
+                <input class="form-control" type="text" data-bind="value: title" />
+            </div>
+            <hr/>
+            <ul class="list-unstyled" data-bind="foreach: toDoItems">
+                <li class="to-do-item">
                     <div class="form-group form-inline">
+                <li>
+                    <div class="form-group form-inline to-do-item">
                         <input type="checkbox" class="checkbox" data-bind="checked: isComplete" />
-                        <input class="form-control" data-bind="value: title, disable: isComplete" />
-                        <button class="btn btn-danger btn-sm" data-bind="click: $parent.removeItem">Delete</button>
+                        <input class="form-control" type="text" data-bind="value: title, disable: isComplete" />
+                        <button class="btn btn-danger btn-sm" data-bind="click: $parent.removeItem">X</button>
                     </div>
                 </li>
             </ul>
+            <button class="btn btn-info btn-sm" data-bind="click: addItem">New Item</button>
         </div>
     </div>
-
+    <hr />
     <div class="row">
-        <div class="col-md-1 col-md-offset-2">
-            <button class="btn btn-info" data-bind="click: addItem">New Task</button>
+        <div class="col-md-1">
+            <button class="btn btn-info btn-sm" data-bind="click: addList">New List</button>
         </div>
         <div class="col-md-1">
-            <button class="btn btn-success" data-bind="click: save">Save</button>
+            <button class="btn btn-success btn-sm" data-bind="click: save">Save</button>
         </div>
     </div>
 }
